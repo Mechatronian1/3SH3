@@ -45,13 +45,13 @@ int main(int argc, char* argv[]){
 
 	/*------------- Check if File --------------*/
 	if(S_ISREG(fileData.st_mode)){
+	
 	//search used database for a user ID
 	struct passwd *pwd;
 	if ((pwd = getpwuid(fileData.st_uid)) != NULL)
 		printf("User ID: %-8.8s \n", pwd ->pw_name);
 	else
 		printf(" %-8d \n", fileData.st_uid);
-	
 	//group database entry for a group ID
 	struct group *grp; 
 	if ((grp = getgrgid(fileData.st_gid)) != NULL)
@@ -84,9 +84,9 @@ void dirFunc(const char *name){
 	char cwd[1024];
 	printf("This is a Directory \n");
 	DIR *pDir;
-	struct dirent *pDirent;
-	
+	struct dirent *pDirent;	
 	pDir = opendir(name);
+	
 	if (pDir == NULL){
 		perror("cannot open directory\n");
 	}
@@ -100,6 +100,7 @@ void dirFunc(const char *name){
 		if ((strcmp(".",pDirent->d_name)!=0) && (strcmp("..",pDirent->d_name)!=0) && (pDirent->d_type == DT_DIR)){
 			char path[PATH_MAX];
 			snprintf(path, PATH_MAX, "%s/%s",name,pDirent->d_name);
+			//Open up the directory with a recursive call of the dirFunc function
 			dirFunc(path);
 		}
 	}
